@@ -1,8 +1,11 @@
-from typing import Optional, List
+from typing import List
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import Field, SQLModel, Session, create_engine, select
+from sqlmodel import Session, select
+
+from fastapi_confz_demo.db import create_db_and_tables, get_session
+from fastapi_confz_demo.models import User, UserRead, UserCreate
 
 app = FastAPI(title="My Application", version="0.0.1")
 
@@ -18,36 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-class UserBase(SQLModel):
-    name: str
-
-
-class User(UserBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-
-class UserCreate(UserBase):
-    pass
-
-
-class UserRead(UserBase):
-    id: int
-
-
-sqlite_url = f"sqlite:///database.db"
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
-
-
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-
-
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 
 @app.on_event("startup")
