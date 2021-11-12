@@ -13,6 +13,7 @@ def db_fixture():
     new_sources = ConfZDataSource(data={
         "echo": True,
         "db": {
+            "type": "sqlite",
             "path": None
         }
     })

@@ -1,8 +1,10 @@
 from pathlib import Path
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Literal
 
-from confz import ConfZ, ConfZDataSource
+from confz import ConfZ, ConfZFileSource
 from pydantic import AnyUrl, SecretStr
+
+CONFIG_DIR = Path(__file__).parent.parent.resolve() / "config"
 
 
 class AppConfig(ConfZ):
@@ -10,21 +12,16 @@ class AppConfig(ConfZ):
     version: str
     cors_origins: List[AnyUrl]
 
-    CONFIG_SOURCES = ConfZDataSource(data={
-        "title": "my-title",
-        "version": "0.1.0",
-        "cors_origins": [
-            "http://localhost",
-            "http://localhost:8080"
-        ]
-    })
+    CONFIG_SOURCES = ConfZFileSource(file=CONFIG_DIR / "api.yml")
 
 
 class SQLiteDB(ConfZ):
+    type: Literal["sqlite"]
     path: Optional[Path]  # None if in-memory
 
 
 class PostgreSQL(ConfZ):
+    type: Literal["postgresql"]
     user: str
     password: SecretStr
     host: str
@@ -38,14 +35,7 @@ class DBConfig(ConfZ):
     echo: bool
     db: DBTypes
 
-    CONFIG_SOURCES = ConfZDataSource(data={
-        "echo": False,
-        # "db": {"path": None},
-        "db": {"path": "database.db"},
-        # "db": {
-        #     "user": "my-user",
-        #     "password": "my-password",
-        #     "host": "localhost",
-        #     "database": "my-database",
-        # }
-    })
+    CONFIG_SOURCES = ConfZFileSource(
+        folder=CONFIG_DIR,
+        file_from_env="DB_ENV"
+    )
