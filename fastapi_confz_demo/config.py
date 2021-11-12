@@ -21,7 +21,7 @@ class AppConfig(ConfZ):
 
 
 class SQLiteDB(ConfZ):
-    path: Optional[Path]
+    path: Optional[Path]  # None if in-memory
 
 
 class PostgreSQL(ConfZ):
@@ -39,7 +39,7 @@ class DBConfig(ConfZ):
     db: DBTypes
 
     CONFIG_SOURCES = ConfZDataSource(data={
-        "echo": True,
+        "echo": False,
         # "db": {"path": None},
         "db": {"path": "database.db"},
         # "db": {

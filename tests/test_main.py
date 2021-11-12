@@ -8,56 +8,52 @@ from fastapi_confz_demo.config import DBConfig
 from fastapi_confz_demo.db import get_engine
 
 
-# TODO: refactor fixtures (e.g. global db fixture, session fixture and client fixture?)
-# TODO: also use auto-fixture so never accidentally access prod db
-
-@pytest.fixture(name="session")
-def session_fixture():
+@pytest.fixture(name="db", autouse=True)
+def db_fixture():
     new_sources = ConfZDataSource(data={
-        "echo": False,  # TODO
-        "db": {"path": None}
+        "echo": True,
+        "db": {
+            "path": None
+        }
     })
     with DBConfig.change_config_sources(new_sources):
         on_startup()
-        engine = get_engine()
-        with Session(engine) as session:
-            yield session
+        yield
+
+
+@pytest.fixture(name="session")
+def session_fixture():
+    with Session(get_engine()) as session:
+        yield session
 
 
 @pytest.fixture(name="client")
-def client_fixture(session: Session):
-    client = TestClient(app)
-    yield client
+def client_fixture():
+    return TestClient(app)
 
 
 def test_create_user(client: TestClient):
-    response = client.post(
-        "/user/", json={"name": "MyName"}
-    )
+    response = client.post("/user/", json={"name": "my-name"})
     data = response.json()
 
     assert response.status_code == 200
-    assert data["name"] == "MyName"
+    assert data["name"] == "my-name"
     assert data["id"] is not None
 
 
 def test_create_user_incomplete(client: TestClient):
-    response = client.post(
-        "/user/", json={"not-needed": "empty"}
-    )
+    response = client.post("/user/", json={"not-needed": "empty"})
     assert response.status_code == 422
 
 
 def test_create_user_invalid(client: TestClient):
-    response = client.post(
-        "/user/", json={"name": {"something": "useless"}}
-    )
+    response = client.post("/user/", json={"name": {"something": "useless"}})
     assert response.status_code == 422
 
 
 def test_read_users(session: Session, client: TestClient):
-    user_1 = User(name="User1")
-    user_2 = User(name="User2")
+    user_1 = User(name="user1")
+    user_2 = User(name="user2")
     session.add(user_1)
     session.add(user_2)
     session.commit()
