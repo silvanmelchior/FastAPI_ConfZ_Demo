@@ -9,6 +9,7 @@ license = "MIT"
 python = "^3.7"
 fastapi = "^0.70.0"
 uvicorn = "^0.15.0"
+# TODO: upgrade confz
 confz = "^1.0.0"
 sqlmodel = "^0.0.4"
 requests = "^2.26.0"
