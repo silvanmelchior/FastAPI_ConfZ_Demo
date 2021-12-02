@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Union, Optional, Literal
 
-from confz import ConfZ, ConfZFileSource
+from confz import ConfZ, ConfZFileSource, ConfZEnvSource
 from pydantic import AnyUrl, SecretStr
 
 CONFIG_DIR = Path(__file__).parent.parent.resolve() / "config"
@@ -35,7 +35,13 @@ class DBConfig(ConfZ):
     echo: bool
     db: DBTypes
 
-    CONFIG_SOURCES = ConfZFileSource(
-        folder=CONFIG_DIR,
-        file_from_env="DB_ENV"
-    )
+    CONFIG_SOURCES = [
+        ConfZFileSource(
+            folder=CONFIG_DIR,
+            file_from_env="DB_ENV"
+        ),
+        ConfZEnvSource(allow=[
+            "db.user",
+            "db.password"
+        ])
+    ]

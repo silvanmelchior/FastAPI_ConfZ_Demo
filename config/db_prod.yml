@@ -1,7 +1,5 @@
 echo: False
 db:
   type: "postgresql"
-  user: "db-user"
-  password: "db-pwd"
   host: "db-host"
   database: "my_db"
