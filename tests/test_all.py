@@ -33,13 +33,17 @@ def client_fixture():
     return TestClient(app)
 
 
-def test_create_user(client: TestClient):
+def test_create_user(session: Session, client: TestClient):
     response = client.post("/user/", json={"name": "my-name"})
     data = response.json()
 
     assert response.status_code == 200
     assert data["name"] == "my-name"
     assert data["id"] is not None
+
+    user = session.get(User, data["id"])
+    assert user is not None
+    assert user.name == "my-name"
 
 
 def test_create_user_incomplete(client: TestClient):
