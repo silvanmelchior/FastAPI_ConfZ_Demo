@@ -1,4 +1,0 @@
-echo: True
-db:
-  type: "sqlite"
-  path: "dev_db.db"

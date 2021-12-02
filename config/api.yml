@@ -1,5 +1,0 @@
-title: "My API"
-version: "1.0.0"
-cors_origins:
-  - "http://localhost"
-  - "https://my-domain.com"

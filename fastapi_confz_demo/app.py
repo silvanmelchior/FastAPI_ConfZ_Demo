@@ -5,15 +5,17 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 
-from fastapi_confz_demo.config import AppConfig
 from fastapi_confz_demo.db import create_db_and_tables, get_session
 from fastapi_confz_demo.models import User, UserRead, UserCreate
 
-app = FastAPI(title=AppConfig().title, version=AppConfig().version)
+app = FastAPI(title="My API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=AppConfig().cors_origins,
+    allow_origins=[
+        "http://localhost",
+        "https://my-domain.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
