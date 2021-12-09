@@ -1,7 +1,7 @@
 # FastAPI & ConfZ Demo
 
-This repository shows how to use FastAPI & ConfZ together. It is the code-base for a corresponding blog article, see
-TODO.
+This repository shows how to use FastAPI & ConfZ together. It is the code-base for a corresponding
+[blog article](https://medium.com/@silvanmelchior/seamless-fastapi-configuration-with-confz-90949c14ea12).
 
 ## Installation
 
