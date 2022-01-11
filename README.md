@@ -1,6 +1,7 @@
-# FastAPI & ConfZ Demo
+# [FastAPI](https://github.com/tiangolo/fastapi) & [ConfZ](https://github.com/Zuehlke/ConfZ) Demo
 
-This repository shows how to use FastAPI & ConfZ together. It is the code-base for a corresponding
+This repository shows how to use [FastAPI](https://github.com/tiangolo/fastapi) 
+& [ConfZ](https://github.com/Zuehlke/ConfZ) together. It is the code-base for a corresponding
 [blog article](https://medium.com/@silvanmelchior/seamless-fastapi-configuration-with-confz-90949c14ea12).
 
 ## Installation
